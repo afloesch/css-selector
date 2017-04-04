@@ -454,10 +454,9 @@ var requirejs, require, define;
 
 define("almond", function(){});
 
-define('index',['require', 'exports', 'module'], function (require, exports, module) {
+define('main',['require', 'exports', 'module'], function (require, exports, module) {
   
 
-var attributes = [];
 function testSelector(element, selector) {
   var check = document.querySelectorAll(selector);
   if (check.length && check.length === 1 && check[0] === element) {
@@ -480,22 +479,18 @@ function getLinkSelector(element) {
   }
   return null;
 }
-function checkForAttribute(element) {
+function checkForAttribute(element, attributes) {
   var selector = null;
-  var attribs = Array.from(attributes);
-  if (attribs.indexOf("id") > -1) {
-    attribs.splice(attribs.indexOf("id"), attribs.indexOf("id") + 1);
-  }
-  for (var i = 0; i < attribs.length; i++) {
-    var attr = element.getAttribute(attribs[i]);
+  for (var i = 0; i < attributes.length; i++) {
+    var attr = element.getAttribute(attributes[i]);
     if (attr) {
-      selector = element.tagName + "[" + attribs[i] + "='" + attr + "']";
+      selector = element.tagName + "[" + attributes[i] + "='" + attr + "']";
       break;
     }
   }
   return selector;
 }
-function getUniqueAttributeSelector(element) {
+function getUniqueAttributeSelector(element, attributes) {
   var selector = null;
   for (var i = 0; i < attributes.length; i++) {
     var attr = element.getAttribute(attributes[i]);
@@ -520,26 +515,43 @@ function checkForBetterParent(element) {
   }
   return element;
 }
-function getIndexSelector(element) {
+function getIndexPosition(element) {
+  var index = 1;
+  var e = element;
+  while (e.previousElementSibling) {
+    index++;
+    e = e.previousElementSibling;
+  }
+  return index;
+}
+function getCssSelector(element, attributes) {
   var e = element;
   var string = "";
   while (e) {
-    var attr = checkForAttribute(e, attributes);
-    if (attr) {
-      string = attr + string;
+    var attrSelector = checkForAttribute(e, attributes);
+    if (attrSelector) {
+      string = attrSelector + string;
     } else {
-      string = e.tagName + string;
+      var index = getIndexPosition(e);
+      if (index > 1) {
+        string = e.tagName + ":nth-child(" + index + ")" + string;
+      } else {
+        string = e.tagName + string;
+      }
     }
-    if (e.parentElement && e.parentElement.childElementCount > 1) {
-      var children = Array.prototype.slice.call(e.parentElement.children);
-      var index = children.indexOf(e);
-      string = string.replace(e.tagName, ":nth-child(" + (index + 1) + ")");
+    if (testSelector(element, string)) {
+      e = null;
+      break;
     }
-    if (e.parentElement && e.parentElement.tagName !== "BODY") {
+    if (e.parentElement && e.parentElement.tagName !== "BODY" && e.parentElement.tagName !== "HTML") {
       string = " > " + string;
       e = e.parentElement;
     } else if (e.parentElement && e.parentElement.tagName === "BODY") {
       string = "BODY > " + string;
+      e = null;
+      break;
+    } else if (e.parentElement && e.parentElement.tagName === "HTML") {
+      string = "HTML > " + string;
       e = null;
       break;
     } else {
@@ -548,13 +560,10 @@ function getIndexSelector(element) {
   }
   return string;
 }
-function getSelectors(element, customAttributes, preferLink) {
+function getSelectors(element, multi, customAttributes, preferLink) {
   var selectors = [];
   var item = element;
-  var anchor;
-  var attr;
-  var css;
-  attributes = [
+  var attributes = [
     "name",
     "id",
     "type",
@@ -572,33 +581,103 @@ function getSelectors(element, customAttributes, preferLink) {
   if (preferLink) {
     item = checkForBetterParent(item);
   }
-  anchor = getLinkSelector(item);
-  attr = getUniqueAttributeSelector(item);
-  css = getIndexSelector(item);
-  if (anchor) {
-    selectors.push(anchor);
+  var anchorSelector = getLinkSelector(item);
+  var attrSelector = getUniqueAttributeSelector(item, attributes);
+  var cssSelector1 = getCssSelector(item, attributes);
+  var cssSelector2 = getCssSelector(item, []);
+  var cssSelector3 = getCssSelector(item, [
+    "id",
+    "name"
+  ]);
+  if (anchorSelector) {
+    selectors.push(anchorSelector);
   }
-  if (attr) {
-    selectors.push(attr);
+  if (attrSelector) {
+    selectors.push(attrSelector);
   }
-  if (css && selectors.indexOf(css) < 0) {
-    selectors.push(css);
+  if (cssSelector1 && selectors.indexOf(cssSelector1) < 0) {
+    selectors.push(cssSelector1);
   }
-  if (selectors.length === 0) {
-    return null;
-  } else {
-    return selectors;
+  if (cssSelector2 && selectors.indexOf(cssSelector2) < 0) {
+    selectors.push(cssSelector2);
   }
+  if (cssSelector3 && selectors.indexOf(cssSelector3) < 0) {
+    selectors.push(cssSelector3);
+  }
+  if (!multi)
+    return selectors[0];
+  return selectors;
 }
 HTMLElement.prototype.getSelectors = function (attributes, link) {
-  return getSelectors(this, attributes, link);
+  return getSelectors(this, true, attributes, link);
+};
+HTMLElement.prototype.getSelector = function (attributes, link) {
+  return getSelectors(this, false, attributes, link);
+};
+SVGSVGElement.prototype.getSelectors = function (attributes, link) {
+  return getSelectors(this, true, attributes, link);
+};
+SVGSVGElement.prototype.getSelector = function (attributes, link) {
+  return getSelectors(this, false, attributes, link);
 };
 module.exports = getSelectors;
 
 return module.exports;
 
 });
-    return require('index');
+define('listener',['require', 'exports', 'module', './main'], function (require, exports, module) {
+  
+
+require("./main");
+var calls = 0;
+var sanitized = [];
+function shouldSend(selectors, callback) {
+  calls++;
+  sanitized.push(selectors);
+  setTimeout(function () {
+    if (calls > 1) {
+      sanitized.shift();
+      calls--;
+    } else {
+      callback(sanitized[0]);
+      sanitized = [];
+      calls = 0;
+    }
+  }, 50);
+}
+HTMLElement.prototype.catchSingleEventSelectors = function (type, callback) {
+  this.addEventListener(type, function (e) {
+    shouldSend(e.target.getSelectors(null, true), function (selectors) {
+      callback(selectors);
+    });
+  });
+};
+HTMLElement.prototype.catchSingleEventSelector = function (type, callback) {
+  this.addEventListener(type, function (e) {
+    shouldSend(e.target.getSelector(null, true), function (selectors) {
+      callback(selectors);
+    });
+  });
+};
+SVGSVGElement.prototype.catchSingleEventSelectors = function (type, callback) {
+  this.addEventListener(type, function (e) {
+    shouldSend(e.target.getSelectors(null, true), function (selectors) {
+      callback(selectors);
+    });
+  });
+};
+SVGSVGElement.prototype.catchSingleEventSelector = function (type, callback) {
+  this.addEventListener(type, function (e) {
+    shouldSend(e.target.getSelector(null, true), function (selectors) {
+      callback(selectors);
+    });
+  });
+};
+
+return module.exports;
+
+});
+    return require('listener');
 
 };
 if (__isAMD) {

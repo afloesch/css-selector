@@ -15,7 +15,7 @@
     "arrow-body-style": "off",
     "brace-style": ["error", "1tbs"],
     "comma-dangle": "off",
-    "complexity": ["error", { "max": 8 }],
+    "complexity": ["error", { "max": 10 }],
     "consistent-return": "off",
     "constructor-super": "warn",
     "curly": "off",

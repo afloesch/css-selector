@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     urequire: {
       _defaults: {
         path: 'src',
-        main: 'index',
+        main: 'listener',
         name: 'CSSSelector'
       },
       main: {

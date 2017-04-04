@@ -1,7 +1,3 @@
-//var calls = 0;
-//var sanitized = [];
-var attributes = [];
-
 // check that selector is unique and matches the given html element
 function testSelector(element, selector) {
   var check = document.querySelectorAll(selector);
@@ -37,25 +33,17 @@ function getLinkSelector(element) {
 }
 
 // check for identifying attributes on html element
-function checkForAttribute(element) {
+function checkForAttribute(element, attributes) {
   var selector = null;
-  var attribs = Array.from(attributes);
 
-  // remove id from the check if it is set. you might not agree with this at first
-  // glance, but by removing this we ensure that the getIndexSelector check returns
-  // a selector that works with dynamic ids from the server.
-  if(attribs.indexOf("id") > -1) {
-    attribs.splice(attribs.indexOf("id"), attribs.indexOf("id") + 1);
-  }
+  for(var i = 0; i < attributes.length; i++) {
 
-  for(var i = 0; i < attribs.length; i++) {
-
-    var attr = element.getAttribute(attribs[i]);
+    var attr = element.getAttribute(attributes[i]);
 
     // if the attribute is found create a selector for it and break the loop and
     // return it
     if(attr) {
-      selector = element.tagName + "[" + attribs[i] + "='" + attr + "']";
+      selector = element.tagName + "[" + attributes[i] + "='" + attr + "']";
       break;
     }
   }
@@ -65,7 +53,7 @@ function checkForAttribute(element) {
 
 // try to generate a unique selector for an html element based off of the set
 // attributes
-function getUniqueAttributeSelector(element) {
+function getUniqueAttributeSelector(element, attributes) {
   var selector = null;
 
   for(var i = 0; i < attributes.length; i++) {
@@ -105,37 +93,57 @@ function checkForBetterParent(element) {
   return element;
 }
 
+function getIndexPosition(element) {
+  var index = 1;
+  var e = element;
+
+  while(e.previousElementSibling) {
+    index++;
+    e = e.previousElementSibling;
+  }
+
+  return index;
+}
+
 // walk up the DOM from the element node given, until the BODY is reached, and return
 // a css selector from the journey
-function getIndexSelector(element) {
+function getCssSelector(element, attributes) {
   var e = element;
   var string = "";
 
   while(e) {
 
     // if there is an attribute of interest on the node then create a selector
-    var attr = checkForAttribute(e, attributes);
+    var attrSelector = checkForAttribute(e, attributes);
 
-    if(attr) {
-      string = attr + string;
+    if(attrSelector) {
+      string = attrSelector + string;
     } else {
-      string = e.tagName + string;
+      var index = getIndexPosition(e);
+      if (index > 1) {
+        string = e.tagName + ":nth-child(" + index + ")" + string;
+      } else {
+        string = e.tagName + string;
+      }
     }
 
-    // if the element has a parent, and that parent has other children then change
-    // the selector to :nth-child and select the element by index position
-    if(e.parentElement && e.parentElement.childElementCount > 1) {
-      var children = Array.prototype.slice.call(e.parentElement.children);
-      var index = children.indexOf(e);
-      string = string.replace(e.tagName, ":nth-child(" + (index + 1) + ")");
+    if (testSelector(element, string)) {
+      e = null;
+      break;
     }
 
     // if the element has a parent element then continue the loop
-    if(e.parentElement && e.parentElement.tagName !== "BODY") {
+    if(e.parentElement &&
+       e.parentElement.tagName !== "BODY" &&
+       e.parentElement.tagName !== "HTML") {
       string = " > " + string;
       e = e.parentElement;
     } else if (e.parentElement && e.parentElement.tagName === "BODY") {
       string = "BODY > " + string;
+      e = null;
+      break;
+    } else if (e.parentElement && e.parentElement.tagName === "HTML") {
+      string = "HTML > " + string;
       e = null;
       break;
     } else {
@@ -146,52 +154,12 @@ function getIndexSelector(element) {
   return string;
 }
 
-// wait 50ms before sending the result to ensure that any click events which are generated
-// on multiple elements for the same click
-/*function shouldSend(element, selectors, callback) {
-  calls++;
-  sanitized.push(selectors);
-  // if there weren't any previous click events then set the current event as the previous
-  setTimeout(function () {
-    if(calls > 1) {
-      sanitized.shift();
-      calls--;
-    } else {
-
-      var filtered = sanitized[0].filter(function (s) {
-        if(s.toLowerCase().match('input') ||
-          s.toLowerCase().match('button') ||
-          s.toLowerCase().match('href') ||
-          s.match('SELECT') ||
-          s.match(' A') ||
-          s.match('A\\[')) {
-          return true;
-        }
-        return false;
-      });
-
-      if(filtered && filtered.length && filtered.length > 0) {
-        callback(filtered);
-      } else {
-        callback(sanitized[0]);
-      }
-
-      sanitized = [];
-      calls = 0;
-    }
-  }, 50);
-}*/
-
 // get a selector for the given element
-function getSelectors(element, customAttributes, preferLink) {
+function getSelectors(element, multi, customAttributes, preferLink) {
 
   var selectors = [];
   var item = element;
-  var anchor;
-  var attr;
-  var css;
-
-  attributes = [
+  var attributes = [
     "name",
     "id",
     "type",
@@ -212,49 +180,51 @@ function getSelectors(element, customAttributes, preferLink) {
     item = checkForBetterParent(item);
   }
 
-  anchor = getLinkSelector(item);
-  attr = getUniqueAttributeSelector(item);
-  css = getIndexSelector(item);
+  var anchorSelector = getLinkSelector(item);
+  var attrSelector = getUniqueAttributeSelector(item, attributes);
+  var cssSelector1 = getCssSelector(item, attributes);
+  var cssSelector2 = getCssSelector(item, []);
+  var cssSelector3 = getCssSelector(item, ["id", "name"]);
 
-  if(anchor) {
-    selectors.push(anchor);
+  if(anchorSelector) {
+    selectors.push(anchorSelector);
   }
 
-  if(attr) {
-    selectors.push(attr);
+  if(attrSelector) {
+    selectors.push(attrSelector);
   }
 
-  if(css && selectors.indexOf(css) < 0) {
-    selectors.push(css);
+  if(cssSelector1 && selectors.indexOf(cssSelector1) < 0) {
+    selectors.push(cssSelector1);
   }
 
-  if(selectors.length === 0) {
-
-    /*if (typeof callback === "function") {
-      callback('could not generate selector!', null);
-    }
-
-    return Promise.reject('could not generate selector!');*/
-
-    return null;
-
-  } else {
-
-    /*shouldSend(item, selectors, function (result) {
-
-      if (typeof callback === "function") {
-        callback(null, result);
-      }
-
-      return Promise.resolve(result);
-    });*/
-
-    return selectors;
+  if(cssSelector2 && selectors.indexOf(cssSelector2) < 0) {
+    selectors.push(cssSelector2);
   }
+
+  if(cssSelector3 && selectors.indexOf(cssSelector3) < 0) {
+    selectors.push(cssSelector3);
+  }
+
+  if (!multi) return selectors[0];
+
+  return selectors;
 }
 
 HTMLElement.prototype.getSelectors = function(attributes, link) {
-  return getSelectors(this, attributes, link);
+  return getSelectors(this, true, attributes, link);
+}
+
+HTMLElement.prototype.getSelector = function(attributes, link) {
+  return getSelectors(this, false, attributes, link);
+}
+
+SVGSVGElement.prototype.getSelectors = function(attributes, link) {
+  return getSelectors(this, true, attributes, link);
+}
+
+SVGSVGElement.prototype.getSelector = function(attributes, link) {
+  return getSelectors(this, false, attributes, link);
 }
 
 module.exports = getSelectors;
