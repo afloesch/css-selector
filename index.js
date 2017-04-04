@@ -631,9 +631,9 @@ define('listener',['require', 'exports', 'module', './main'], function (require,
 require("./main");
 var calls = 0;
 var sanitized = [];
-function shouldSend(selectors, callback) {
+function shouldSend(e, callback) {
   calls++;
-  sanitized.push(selectors);
+  sanitized.push(e);
   setTimeout(function () {
     if (calls > 1) {
       sanitized.shift();
@@ -645,31 +645,17 @@ function shouldSend(selectors, callback) {
     }
   }, 50);
 }
-HTMLElement.prototype.catchSingleEventSelectors = function (type, callback) {
+HTMLElement.prototype.catchSingleEvent = function (type, callback) {
   this.addEventListener(type, function (e) {
-    shouldSend(e.target.getSelectors(null, true), function (selectors) {
-      callback(selectors);
+    shouldSend(e, function (evt) {
+      callback(evt);
     });
   });
 };
-HTMLElement.prototype.catchSingleEventSelector = function (type, callback) {
+SVGSVGElement.prototype.catchSingleEvent = function (type, callback) {
   this.addEventListener(type, function (e) {
-    shouldSend(e.target.getSelector(null, true), function (selectors) {
-      callback(selectors);
-    });
-  });
-};
-SVGSVGElement.prototype.catchSingleEventSelectors = function (type, callback) {
-  this.addEventListener(type, function (e) {
-    shouldSend(e.target.getSelectors(null, true), function (selectors) {
-      callback(selectors);
-    });
-  });
-};
-SVGSVGElement.prototype.catchSingleEventSelector = function (type, callback) {
-  this.addEventListener(type, function (e) {
-    shouldSend(e.target.getSelector(null, true), function (selectors) {
-      callback(selectors);
+    shouldSend(e, function (evt) {
+      callback(evt);
     });
   });
 };
