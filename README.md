@@ -86,19 +86,12 @@ var attributes = [
 ];
 ```
 
-### catchSingleEventSelectors & catchSingleEventSelector
+### catchSingleEvent
 
 These are helper methods for adding event listeners to elements, which solve a problem with two click events being sent from the browser for the same user click. For example, when clicking on a label that is on top of an input that is dynamically moved with js. These helper listeners will only return the final event that came in from the same user event.
 
 ```javascript
-HTMLElement.catchSingleEventSelectors(
-  type,
-  callback
-);
-```
-
-```javascript
-HTMLElement.catchSingleEventSelector(
+HTMLElement.catchSingleEvent(
   type,
   callback
 );
@@ -107,12 +100,16 @@ HTMLElement.catchSingleEventSelector(
 | Param | Type | Description |
 |-------|------|-------------|
 | type | String | The kind of event to listen for. [HTML Events](https://developer.mozilla.org/en-US/docs/Web/Events) |
+| callback | Function | The callback function to call when an event is caught. Passed to the callback is the event object and selector result. |
 
 Here is an example implementation which will catch any click events that are on, or bubble up to, the body:
 
 ```javascript
-document.body.catchSingleEventSelectors('click', function(evt, selectors) {
-  console.log(selectors);
+document.body.catchSingleEvent('click', function(e) {
+
+  if (!e.isTrusted) return;
+
+  console.log(e.target.getSelectors());
 });
 ```
 
