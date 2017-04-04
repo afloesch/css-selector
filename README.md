@@ -4,9 +4,9 @@ Generating unique css selectors is hard. Css-selector makes it easy.
 
 We found other modules were perfectly reliable when generating selectors for content on a website we controlled, but found them lacking when trying to generate reliable css selectors on others' websites. Id and class attributes are the defacto way of generating a selector to an element, but they are also the most commonly adjusted attributes by developers, making them extremely fragile as css selectors. There are just too many dynamic elements in building an html page today for a single selector to work very reliably.
 
-Css-selector works around this difficulty by returning an array of selectors for an element, with up to three different results, that are all guaranteed to be unique for the given html element.
+Css-selector works around this difficulty by returning an array of selectors for an element, each with a different strategy for addressing the element, in order of their strength.
 
-If a particular selector result is not unique then it is thrown out, making it trivial to pass the entire array of selectors to `document.querySelector` for the correct element on the page.
+If a particular selector result is not unique, and not the element passed, then it is thrown out.
 
 ## Getting Started
 
@@ -20,26 +20,119 @@ Add the script to your page.
 <script src="bower_components/css-selector/index.min.js"></script>
 ```
 
-Now get a set of selectors for an element. Css-selector extends the HTMLElement object with the getSelectors method.
+Create a test element.
 
 ```javascript
 // create test element
 var element = document.createElement('DIV');
 document.body.appendChild(element);
+```
 
-// get the selectors
+Now get a set of selectors for the element. Css-selector extends the [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) object with the getSelectors method.
+
+### Get array of selectors
+
+```javascript
 var selectors = element.getSelectors();
 ```
 
-To retrieve that same element just pass the entire array of selectors.
+### Get single selector
 
 ```javascript
-var sameElement = document.querySelector(selectors);
+var selector = element.getSelector();
+```
+
+## Documentation
+
+### getSelectors  &  getSelector
+
+```javascript
+HTMLElement.getSelectors(
+  customAttributes,
+  preferLink
+);
+
+// or
+
+cssSelector(element, customAttributes, preferLink);
+```
+
+```javascript
+HTMLElement.getSelector(
+  customAttributes,
+  preferLink
+);
+```
+
+| Param | Type | Description |
+|-------|------|-------------|
+| customAttributes | Array | Pass an array of custom html attributes which will replace the options specified below.|
+| preferLink | Boolean | This is a convenience option for cases where the element is nested inside an anchor or button element. It's not uncommon for anchor tags to have further nested structures, and if preferLink is set to `true` then css-selector will return a selector for any parent link or button found. This is useful when dynamically generating selectors from user click events.|
+
+Default css-selector html attributes:
+
+```javascript
+var attributes = [
+  "name",
+  "id",
+  "type",
+  "action",
+  "for",
+  "src",
+  "alt",
+  "data-tl-id",
+  "data-id",
+  "aria-label"
+];
+```
+
+### catchSingleEventSelectors & catchSingleEventSelector
+
+These are helper methods for adding event listeners to elements, which solve a problem with two click events being sent from the browser for the same user click. For example, when clicking on a label that is on top of an input that is dynamically moved with js. These helper listeners will only return the final event that came in from the same user event.
+
+```javascript
+HTMLElement.catchSingleEventSelectors(
+  type,
+  callback
+);
+```
+
+```javascript
+HTMLElement.catchSingleEventSelector(
+  type,
+  callback
+);
+```
+
+| Param | Type | Description |
+|-------|------|-------------|
+| type | String | The kind of event to listen for. [HTML Events](https://developer.mozilla.org/en-US/docs/Web/Events) |
+
+Here is an example implementation which will catch any click events that are on, or bubble up to, the body:
+
+```javascript
+document.body.catchSingleEventSelectors('click', function(selectors) {
+  console.log(selectors);
+});
 ```
 
 ## AMD
 
+Css-selector is in UMD format, so AMD modules are supported.
 
+```javascript
+define('myModule', ['css-selector'], function (cssSelector) {
+
+    var element = document.createElement('DIV');
+    document.body.appendChild(element);
+
+    // get the selectors
+    var selectors = cssSelector(element);
+
+    //Define the module value by returning a value.
+    return selectors;
+});
+```
 
 ## Common JS
 
@@ -47,9 +140,10 @@ If you are using Common JS module format and bundling for the browser (like with
 
 ```javascript
 var cssSelector = require('css-selector');
-
-// get the selectors
-var selectors = element.getSelectors();
-// or
 var selectors = cssSelector(element);
+
+// or
+
+require('css-selector');
+var selectors = element.getSelectors();
 ```
