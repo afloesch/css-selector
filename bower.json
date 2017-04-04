@@ -1,0 +1,24 @@
+{
+  "name": "css-selector",
+  "description": "CSS selector generator for browser environments.",
+  "main": "index.js",
+  "authors": [
+    "Andrew Loesch"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "css",
+    "selector",
+    "generator",
+    "xpath"
+  ],
+  "homepage": "https://github.com/afloesch/css-selector",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
