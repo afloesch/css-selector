@@ -10,6 +10,8 @@ If a particular selector result is not unique, and not the element passed, then 
 
 ## Getting Started
 
+Checkout this simple [JSFiddle example](https://jsfiddle.net/89fcwe67/3/)
+
 ```shell
 bower install --save css-selector
 ```
