@@ -102,7 +102,7 @@ HTMLElement.catchSingleEvent(
 | Param | Type | Description |
 |-------|------|-------------|
 | type | String | The kind of event to listen for. [HTML Events](https://developer.mozilla.org/en-US/docs/Web/Events) |
-| callback | Function | The callback function to call when an event is caught. Passed to the callback is the event object and selector result. |
+| callback | Function | The callback function to call when an event is caught. Passed to the callback is the event object. |
 
 Here is an example implementation which will catch any click events that are on, or bubble up to, the body:
 
