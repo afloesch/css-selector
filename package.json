@@ -1,9 +1,10 @@
 {
   "name": "css-selector",
   "version": "1.0.0",
-  "description": "CSS selector generator for node or browser environments.",
+  "description": "CSS selector generator for browser environments.",
   "main": "index.js",
   "scripts": {
+    "start": "grunt",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
