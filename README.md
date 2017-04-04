@@ -88,7 +88,7 @@ var attributes = [
 
 ### catchSingleEvent
 
-These are helper methods for adding event listeners to elements, which solve a problem with two click events being sent from the browser for the same user click. For example, when clicking on a label that is on top of an input that is dynamically moved with js. These helper listeners will only return the final event that came in from the same user event.
+This is a helper method for adding event listeners to elements, which solves a problem with two click events being sent from the browser for the same user click. For example, when clicking on a label that is on top of an input that is dynamically moved with js. These helper listeners will only return the final event that came in from the same user event.
 
 ```javascript
 HTMLElement.catchSingleEvent(
