@@ -11,7 +11,7 @@ Making it trivial to pass the entire array of selectors to `document.querySelect
 ## Getting Started
 
 ```shell
-bower install css-selector
+bower install --save css-selector
 ```
 
 Add the script to your page.
