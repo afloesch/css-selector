@@ -5,10 +5,10 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     eslint: {
-        options: {
-            configFile: 'eslint.json'
-        },
-        target: ['src', 'Gruntfile']
+      options: {
+        configFile: 'eslint.json'
+      },
+      target: ['src', 'Gruntfile']
     },
 
     urequire: {
@@ -18,8 +18,8 @@ module.exports = function(grunt) {
         name: 'CSSSelector'
       },
       main: {
-          template: 'combined',
-          dstPath: 'index.js'
+        template: 'combined',
+        dstPath: 'index.js'
       },
       min : {
         template: 'combined',

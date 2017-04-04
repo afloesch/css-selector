@@ -457,18 +457,7 @@ define("almond", function(){});
 define('index',['require', 'exports', 'module'], function (require, exports, module) {
   
 
-var attributes = [
-  "name",
-  "src",
-  "id",
-  "type",
-  "action",
-  "for",
-  "alt",
-  "data-tl-id",
-  "data-id",
-  "aria-label"
-];
+var attributes = [];
 function testSelector(element, selector) {
   var check = document.querySelectorAll(selector);
   if (check.length && check.length === 1 && check[0] === element) {
@@ -476,7 +465,7 @@ function testSelector(element, selector) {
   }
   return false;
 }
-function checkForLink(element) {
+function getLinkSelector(element) {
   var link = element.getAttribute("href");
   if (link) {
     if (link === "#") {
@@ -506,7 +495,7 @@ function checkForAttribute(element) {
   }
   return selector;
 }
-function checkForUniqueAttributeSelector(element) {
+function getUniqueAttributeSelector(element) {
   var selector = null;
   for (var i = 0; i < attributes.length; i++) {
     var attr = element.getAttribute(attributes[i]);
@@ -531,15 +520,10 @@ function checkForBetterParent(element) {
   }
   return element;
 }
-function walkDom(element) {
+function getIndexSelector(element) {
   var e = element;
   var string = "";
   while (e) {
-    if (e.tagName === "BODY") {
-      string = "BODY" + string;
-      e = null;
-      break;
-    }
     var attr = checkForAttribute(e, attributes);
     if (attr) {
       string = attr + string;
@@ -551,22 +535,46 @@ function walkDom(element) {
       var index = children.indexOf(e);
       string = string.replace(e.tagName, ":nth-child(" + (index + 1) + ")");
     }
-    if (e.parentElement && e.parentElement.tagName !== "HTML") {
+    if (e.parentElement && e.parentElement.tagName !== "BODY") {
       string = " > " + string;
       e = e.parentElement;
+    } else if (e.parentElement && e.parentElement.tagName === "BODY") {
+      string = "BODY > " + string;
+      e = null;
+      break;
     } else {
       e = null;
     }
   }
   return string;
 }
-function getSelectors(element) {
+function getSelectors(element, customAttributes, preferLink) {
   var selectors = [];
   var item = element;
-  item = checkForBetterParent(item);
-  var anchor = checkForLink(item);
-  var attr = checkForUniqueAttributeSelector(item);
-  var css = walkDom(item);
+  var anchor;
+  var attr;
+  var css;
+  attributes = [
+    "name",
+    "id",
+    "type",
+    "action",
+    "for",
+    "src",
+    "alt",
+    "data-tl-id",
+    "data-id",
+    "aria-label"
+  ];
+  if (customAttributes && Array.isArray(customAttributes)) {
+    attributes = customAttributes;
+  }
+  if (preferLink) {
+    item = checkForBetterParent(item);
+  }
+  anchor = getLinkSelector(item);
+  attr = getUniqueAttributeSelector(item);
+  css = getIndexSelector(item);
   if (anchor) {
     selectors.push(anchor);
   }
@@ -582,8 +590,8 @@ function getSelectors(element) {
     return selectors;
   }
 }
-HTMLElement.prototype.getSelectors = function () {
-  return getSelectors(this);
+HTMLElement.prototype.getSelectors = function (attributes, link) {
+  return getSelectors(this, attributes, link);
 };
 module.exports = getSelectors;
 
