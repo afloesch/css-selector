@@ -4,9 +4,9 @@ Generating unique css selectors is hard. Css-selector makes it easy.
 
 We found other modules were perfectly reliable when generating selectors for content on a website we controlled, but found them lacking when trying to generate reliable css selectors on others' websites. Id and class attributes are the defacto way of generating a selector to an element, but they are also the most commonly adjusted attributes by developers, making them extremely fragile as css selectors. There are just too many dynamic elements in building an html page today for a single selector to work very reliably.
 
-Css-selector works around this difficulty by returning an array of selectors for an element, with up to three different results, that are all guaranteed to be unique for the given html element. If a particular selector result is not unique then it is thrown out.
+Css-selector works around this difficulty by returning an array of selectors for an element, with up to three different results, that are all guaranteed to be unique for the given html element.
 
-Making it trivial to pass the entire array of selectors to `document.querySelector` for the correct element on the page.
+If a particular selector result is not unique then it is thrown out, making it trivial to pass the entire array of selectors to `document.querySelector` for the correct element on the page.
 
 ## Getting Started
 
