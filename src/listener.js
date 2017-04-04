@@ -24,7 +24,7 @@ function shouldSend(selectors, callback) {
 HTMLElement.prototype.catchSingleEventSelectors = function(type, callback) {
   this.addEventListener(type, function(e) {
     shouldSend(e.target.getSelectors(null, true), function(selectors) {
-      callback(selectors);
+      callback(e, selectors);
     });
   });
 }
@@ -32,7 +32,7 @@ HTMLElement.prototype.catchSingleEventSelectors = function(type, callback) {
 HTMLElement.prototype.catchSingleEventSelector = function(type, callback) {
   this.addEventListener(type, function(e) {
     shouldSend(e.target.getSelector(null, true), function(selectors) {
-      callback(selectors);
+      callback(e, selectors);
     });
   });
 }
@@ -40,7 +40,7 @@ HTMLElement.prototype.catchSingleEventSelector = function(type, callback) {
 SVGSVGElement.prototype.catchSingleEventSelectors = function(type, callback) {
   this.addEventListener(type, function(e) {
     shouldSend(e.target.getSelectors(null, true), function(selectors) {
-      callback(selectors);
+      callback(e, selectors);
     });
   });
 }
@@ -48,7 +48,7 @@ SVGSVGElement.prototype.catchSingleEventSelectors = function(type, callback) {
 SVGSVGElement.prototype.catchSingleEventSelector = function(type, callback) {
   this.addEventListener(type, function(e) {
     shouldSend(e.target.getSelector(null, true), function(selectors) {
-      callback(selectors);
+      callback(e, selectors);
     });
   });
 }

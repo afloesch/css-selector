@@ -111,7 +111,7 @@ HTMLElement.catchSingleEventSelector(
 Here is an example implementation which will catch any click events that are on, or bubble up to, the body:
 
 ```javascript
-document.body.catchSingleEventSelectors('click', function(selectors) {
+document.body.catchSingleEventSelectors('click', function(evt, selectors) {
   console.log(selectors);
 });
 ```
