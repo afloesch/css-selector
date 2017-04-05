@@ -1,24 +1,29 @@
 {
-  "name": "css-selector",
-  "description": "CSS selector generator for browser environments.",
+  "name": "css-selector-tools",
+  "description": "CSS selector generator and utilities for a browser environments.",
   "main": "index.js",
   "authors": [
-    "Andrew Loesch"
+    "Andrew Loesch <afloesch@gmail.com>"
   ],
   "license": "MIT",
-  "keywords": [
-    "css",
-    "selector",
-    "generator",
-    "xpath"
-  ],
   "homepage": "https://github.com/afloesch/css-selector",
-  "private": true,
+  "private": false,
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "tests"
+  ],
+  "keywords": [
+    "css",
+    "selector",
+    "generator",
+    "xpath"
   ]
 }

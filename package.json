@@ -1,7 +1,7 @@
 {
-  "name": "css-selector",
-  "version": "1.0.0",
-  "description": "CSS selector generator for browser environments.",
+  "name": "css-selector-tools",
+  "version": "1.0.1",
+  "description": "CSS selector generator and utilities for a browser environments.",
   "main": "index.js",
   "scripts": {
     "start": "grunt",
@@ -22,5 +22,11 @@
     "load-grunt-tasks": "^3.5.2",
     "time-grunt": "^1.4.0",
     "urequire": "^0.7.0-beta.11"
-  }
+  },
+  "keywords": [
+    "css",
+    "selector",
+    "generator",
+    "xpath"
+  ]
 }

@@ -10,7 +10,7 @@ If a particular selector result is not unique, and not the element passed, then 
 
 ## Getting Started
 
-Checkout this simple [JSFiddle example](https://jsfiddle.net/89fcwe67/3/)
+Checkout this simple [JSFiddle example](https://jsfiddle.net/89fcwe67/4/)
 
 ```shell
 bower install --save css-selector
@@ -126,7 +126,7 @@ define('myModule', ['css-selector'], function (cssSelector) {
     document.body.appendChild(element);
 
     var selectors = cssSelector(element);
-    
+
     return selectors;
 });
 ```
