@@ -1,10 +1,10 @@
-# css-selector
+# css-selector-tools
 
-Generating unique css selectors is hard. Css-selector makes it easy.
+Generating unique css selectors is hard. Css-selector-tools makes it easy.
 
 We found other modules were perfectly reliable when generating selectors for content on a website we controlled, but found them lacking when trying to generate reliable css selectors on others' websites. Id and class attributes are the defacto way of generating a selector to an element, but they are also the most commonly adjusted attributes by developers, making them extremely fragile as css selectors. There are just too many dynamic elements in building an html page today for a single selector to work very reliably.
 
-Css-selector works around this difficulty by returning an array of selectors for an element, each with a different strategy for addressing the element, in order of their strength.
+Css-selector-tools works around this difficulty by returning an array of selectors for an element, each with a different strategy for addressing the element, in order of their strength.
 
 If a particular selector result is not unique, and not the element passed, then it is thrown out.
 
@@ -13,7 +13,11 @@ If a particular selector result is not unique, and not the element passed, then 
 Checkout this simple [JSFiddle example](https://jsfiddle.net/89fcwe67/4/)
 
 ```shell
-bower install --save css-selector
+bower install --save css-selector-tools
+```
+
+```shell
+npm install --save css-selector-tools
 ```
 
 Add the script to your page.
@@ -30,7 +34,7 @@ var element = document.createElement('DIV');
 document.body.appendChild(element);
 ```
 
-Now get a set of selectors for the element. Css-selector extends the [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) object with the getSelectors method.
+Now get a set of selectors for the element. Css-selector-tools extends the [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement) object with the getSelectors method.
 
 ### Get array of selectors
 
@@ -69,7 +73,7 @@ HTMLElement.getSelector(
 | Param | Type | Description |
 |-------|------|-------------|
 | customAttributes | Array | Pass an array of custom html attributes which will replace the options specified below.|
-| preferLink | Boolean | This is a convenience option for cases where the element is nested inside an anchor or button element. It's not uncommon for anchor tags to have further nested structures, and if preferLink is set to `true` then css-selector will return a selector for any parent link or button found. This is useful when dynamically generating selectors from user click events.|
+| preferLink | Boolean | This is a convenience option for cases where the element is nested inside an anchor or button element. It's not uncommon for anchor tags to have further nested structures, and if preferLink is set to `true` then css-selector-tools will return a selector for any parent link or button found. This is useful when dynamically generating selectors from user click events.|
 
 Default css-selector html attributes:
 
