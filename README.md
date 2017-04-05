@@ -23,7 +23,7 @@ npm install --save css-selector-tools
 Add the script to your page.
 
 ```html
-<script src="bower_components/css-selector/index.min.js"></script>
+<script src="bower_components/css-selector-tools/index.min.js"></script>
 ```
 
 Create a test element.
@@ -124,7 +124,7 @@ document.body.catchSingleEvent('click', function(e) {
 Css-selector is in UMD format, so AMD modules are supported.
 
 ```javascript
-define('myModule', ['css-selector'], function (cssSelector) {
+define('myModule', ['css-selector-tools'], function (cssSelector) {
 
     var element = document.createElement('DIV');
     document.body.appendChild(element);
@@ -140,11 +140,11 @@ define('myModule', ['css-selector'], function (cssSelector) {
 If you are using Common JS module format and bundling for the browser (like with browserify) then you can require the module.
 
 ```javascript
-var cssSelector = require('css-selector');
+var cssSelector = require('css-selector-tools');
 var selectors = cssSelector(element);
 
 // or
 
-require('css-selector');
+require('css-selector-tools');
 var selectors = element.getSelectors();
 ```
