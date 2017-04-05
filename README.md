@@ -125,10 +125,8 @@ define('myModule', ['css-selector'], function (cssSelector) {
     var element = document.createElement('DIV');
     document.body.appendChild(element);
 
-    // get the selectors
     var selectors = cssSelector(element);
-
-    //Define the module value by returning a value.
+    
     return selectors;
 });
 ```
