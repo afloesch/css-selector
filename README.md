@@ -120,7 +120,7 @@ document.body.catchSingleEvent('click', function(e) {
 Css-selector is in UMD format, so AMD modules are supported.
 
 ```javascript
-define('myModule', ['css-selector-tools'], function (cssS) {
+define('myModule', ['css-selector-tools'], function (css) {
 
     var element = document.createElement('DIV');
     document.body.appendChild(element);

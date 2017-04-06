@@ -1,7 +1,7 @@
 {
   "name": "css-selector-tools",
   "version": "1.0.5",
-  "description": "CSS selector generator and utilities for a browser environments.",
+  "description": "CSS selector generator and utilities for browser environments.",
   "main": "index.js",
   "scripts": {
     "start": "grunt",
