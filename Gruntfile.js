@@ -11,11 +11,14 @@ module.exports = function(grunt) {
       target: ['src', 'Gruntfile']
     },
 
+    mocha_phantomjs: {
+      all: ['test/**/*.html']
+    },
+
     urequire: {
       _defaults: {
         path: 'src',
-        main: 'listener',
-        name: 'CSSSelector'
+        main: 'listener'
       },
       main: {
         template: 'combined',
@@ -29,5 +32,5 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['eslint', 'urequire']);
+  grunt.registerTask('default', ['eslint', 'mocha_phantomjs', 'urequire']);
 }
