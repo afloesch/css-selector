@@ -57,10 +57,6 @@ HTMLElement.getSelectors(
   customAttributes,
   preferLink
 );
-
-// or
-
-cssSelector(element, customAttributes, preferLink);
 ```
 
 ```javascript
