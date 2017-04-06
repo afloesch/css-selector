@@ -32,5 +32,5 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['eslint', 'mocha_phantomjs', 'urequire']);
+  grunt.registerTask('default', ['eslint', 'urequire']);
 }
