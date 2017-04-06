@@ -124,12 +124,12 @@ document.body.catchSingleEvent('click', function(e) {
 Css-selector is in UMD format, so AMD modules are supported.
 
 ```javascript
-define('myModule', ['css-selector-tools'], function (cssSelector) {
+define('myModule', ['css-selector-tools'], function (cssS) {
 
     var element = document.createElement('DIV');
     document.body.appendChild(element);
 
-    var selectors = cssSelector(element);
+    var selectors = css.getSelectors(element);
 
     return selectors;
 });
@@ -140,8 +140,8 @@ define('myModule', ['css-selector-tools'], function (cssSelector) {
 If you are using Common JS module format and bundling for the browser (like with browserify) then you can require the module.
 
 ```javascript
-var cssSelector = require('css-selector-tools');
-var selectors = cssSelector(element);
+var css = require('css-selector-tools');
+var selectors = css.getSelectors(element);
 
 // or
 

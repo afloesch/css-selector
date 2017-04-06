@@ -560,7 +560,7 @@ function getCssSelector(element, attributes) {
   }
   return string;
 }
-function getSelectors(element, multi, customAttributes, preferLink) {
+function makeSelectors(element, multi, customAttributes, preferLink) {
   var selectors = [];
   var item = element;
   var attributes = [
@@ -608,19 +608,28 @@ function getSelectors(element, multi, customAttributes, preferLink) {
     return selectors[0];
   return selectors;
 }
+function getSelectors(attributes, link) {
+  return makeSelectors(this, true, attributes, link);
+}
+function getSelector(attributes, link) {
+  return makeSelectors(this, false, attributes, link);
+}
 HTMLElement.prototype.getSelectors = function (attributes, link) {
-  return getSelectors(this, true, attributes, link);
+  return makeSelectors(this, true, attributes, link);
 };
 HTMLElement.prototype.getSelector = function (attributes, link) {
-  return getSelectors(this, false, attributes, link);
+  return makeSelectors(this, false, attributes, link);
 };
 SVGSVGElement.prototype.getSelectors = function (attributes, link) {
-  return getSelectors(this, true, attributes, link);
+  return makeSelectors(this, true, attributes, link);
 };
 SVGSVGElement.prototype.getSelector = function (attributes, link) {
-  return getSelectors(this, false, attributes, link);
+  return makeSelectors(this, false, attributes, link);
 };
-module.exports = getSelectors;
+module.exports = {
+  getSelectors: getSelectors,
+  getSelector: getSelector
+};
 
 return module.exports;
 
