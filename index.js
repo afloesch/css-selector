@@ -626,12 +626,10 @@ SVGSVGElement.prototype.getSelectors = function (attributes, link) {
 SVGSVGElement.prototype.getSelector = function (attributes, link) {
   return makeSelectors(this, false, attributes, link);
 };
-if (module) {
-  module.exports = {
-    getSelectors: getSelectors,
-    getSelector: getSelector
-  };
-}
+module.exports = {
+  getSelectors: getSelectors,
+  getSelector: getSelector
+};
 
 return module.exports;
 
