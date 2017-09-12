@@ -21,18 +21,22 @@ function shouldSend(e, callback) {
   }, 50);
 }
 
-HTMLElement.prototype.catchSingleEvent = function(type, callback) {
-  this.addEventListener(type, function(e) {
-    shouldSend(e, function(evt) {
-      callback(evt);
+if (HTMLElement && typeof HTMLElement !== "undefined") {
+  HTMLElement.prototype.catchSingleEvent = function(type, callback) {
+    this.addEventListener(type, function(e) {
+      shouldSend(e, function(evt) {
+        callback(evt);
+      });
     });
-  });
+  }
 }
 
-SVGSVGElement.prototype.catchSingleEvent = function(type, callback) {
-  this.addEventListener(type, function(e) {
-    shouldSend(e, function(evt) {
-      callback(evt);
+if (SVGSVGElement && typeof SVGSVGElement !== "undefined") {
+  SVGSVGElement.prototype.catchSingleEvent = function(type, callback) {
+    this.addEventListener(type, function(e) {
+      shouldSend(e, function(evt) {
+        callback(evt);
+      });
     });
-  });
+  }
 }

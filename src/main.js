@@ -219,20 +219,24 @@ function getSelector(attributes, link) {
   return makeSelectors(this, false, attributes, link);
 }
 
-HTMLElement.prototype.getSelectors = function(attributes, link) {
-  return makeSelectors(this, true, attributes, link);
+if (HTMLElement && typeof HTMLElement !== "undefined") {
+  HTMLElement.prototype.getSelectors = function(attributes, link) {
+    return makeSelectors(this, true, attributes, link);
+  }
+
+  HTMLElement.prototype.getSelector = function(attributes, link) {
+    return makeSelectors(this, false, attributes, link);
+  }
 }
 
-HTMLElement.prototype.getSelector = function(attributes, link) {
-  return makeSelectors(this, false, attributes, link);
-}
+if (SVGSVGElement && typeof SVGSVGElement !== "undefined") {
+  SVGSVGElement.prototype.getSelectors = function(attributes, link) {
+    return makeSelectors(this, true, attributes, link);
+  }
 
-SVGSVGElement.prototype.getSelectors = function(attributes, link) {
-  return makeSelectors(this, true, attributes, link);
-}
-
-SVGSVGElement.prototype.getSelector = function(attributes, link) {
-  return makeSelectors(this, false, attributes, link);
+  SVGSVGElement.prototype.getSelector = function(attributes, link) {
+    return makeSelectors(this, false, attributes, link);
+  }
 }
 
 module.exports = {
