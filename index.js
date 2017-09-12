@@ -614,7 +614,7 @@ function getSelectors(attributes, link) {
 function getSelector(attributes, link) {
   return makeSelectors(this, false, attributes, link);
 }
-if (HTMLElement && typeof HTMLElement !== "undefined") {
+if (typeof HTMLElement !== "undefined" && HTMLElement) {
   HTMLElement.prototype.getSelectors = function (attributes, link) {
     return makeSelectors(this, true, attributes, link);
   };
@@ -622,7 +622,7 @@ if (HTMLElement && typeof HTMLElement !== "undefined") {
     return makeSelectors(this, false, attributes, link);
   };
 }
-if (SVGSVGElement && typeof SVGSVGElement !== "undefined") {
+if (typeof SVGSVGElement !== "undefined" && SVGSVGElement) {
   SVGSVGElement.prototype.getSelectors = function (attributes, link) {
     return makeSelectors(this, true, attributes, link);
   };
@@ -658,7 +658,7 @@ function shouldSend(e, callback) {
     }
   }, 50);
 }
-if (HTMLElement && typeof HTMLElement !== "undefined") {
+if (typeof HTMLElement !== "undefined" && HTMLElement) {
   HTMLElement.prototype.catchSingleEvent = function (type, callback) {
     this.addEventListener(type, function (e) {
       shouldSend(e, function (evt) {
@@ -667,7 +667,7 @@ if (HTMLElement && typeof HTMLElement !== "undefined") {
     });
   };
 }
-if (SVGSVGElement && typeof SVGSVGElement !== "undefined") {
+if (typeof SVGSVGElement !== "undefined" && SVGSVGElement) {
   SVGSVGElement.prototype.catchSingleEvent = function (type, callback) {
     this.addEventListener(type, function (e) {
       shouldSend(e, function (evt) {

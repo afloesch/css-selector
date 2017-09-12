@@ -219,7 +219,7 @@ function getSelector(attributes, link) {
   return makeSelectors(this, false, attributes, link);
 }
 
-if (HTMLElement && typeof HTMLElement !== "undefined") {
+if (typeof HTMLElement !== "undefined" && HTMLElement) {
   HTMLElement.prototype.getSelectors = function(attributes, link) {
     return makeSelectors(this, true, attributes, link);
   }
@@ -229,7 +229,7 @@ if (HTMLElement && typeof HTMLElement !== "undefined") {
   }
 }
 
-if (SVGSVGElement && typeof SVGSVGElement !== "undefined") {
+if (typeof SVGSVGElement !== "undefined" && SVGSVGElement) {
   SVGSVGElement.prototype.getSelectors = function(attributes, link) {
     return makeSelectors(this, true, attributes, link);
   }

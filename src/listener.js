@@ -21,7 +21,7 @@ function shouldSend(e, callback) {
   }, 50);
 }
 
-if (HTMLElement && typeof HTMLElement !== "undefined") {
+if (typeof HTMLElement !== "undefined" && HTMLElement) {
   HTMLElement.prototype.catchSingleEvent = function(type, callback) {
     this.addEventListener(type, function(e) {
       shouldSend(e, function(evt) {
@@ -31,7 +31,7 @@ if (HTMLElement && typeof HTMLElement !== "undefined") {
   }
 }
 
-if (SVGSVGElement && typeof SVGSVGElement !== "undefined") {
+if (typeof SVGSVGElement !== "undefined" && SVGSVGElement) {
   SVGSVGElement.prototype.catchSingleEvent = function(type, callback) {
     this.addEventListener(type, function(e) {
       shouldSend(e, function(evt) {
