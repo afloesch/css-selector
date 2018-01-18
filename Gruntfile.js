@@ -20,10 +20,6 @@ module.exports = function(grunt) {
         path: 'src',
         main: 'listener'
       },
-      main: {
-        template: 'combined',
-        dstPath: 'index.js'
-      },
       min : {
         template: 'combined',
         dstPath: 'index.min.js',
