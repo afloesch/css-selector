@@ -1,6 +1,6 @@
 {
   "name": "css-selector-tools",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "CSS selector generator and utilities for browser environments.",
   "main": "index.js",
   "scripts": {
