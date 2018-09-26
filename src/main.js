@@ -23,9 +23,9 @@ function getLinkSelector(element) {
     // cutout any query string params from the link and create a "contains" selector
     if(link.match('\\?')) {
       var parts = link.split('?', 1);
-      return element.tagName + "[href*='" + parts[0] + "']"
+      return element.tagName + "[href*=\"" + parts[0] + "\"]"
     } else {
-      return element.tagName + "[href='" + link + "']";
+      return element.tagName + "[href=\"" + link + "\"]";
     }
   }
 
@@ -43,7 +43,8 @@ function checkForAttribute(element, attributes) {
     // if the attribute is found create a selector for it and break the loop and
     // return it
     if(attr) {
-      selector = element.tagName + "[" + attributes[i] + "='" + attr + "']";
+      var clean = attr.replace(new RegExp("'", 'g'), "\\\'");
+      selector = element.tagName + "[" + attributes[i] + "=\"" + clean + "\"]";
       break;
     }
   }
@@ -62,12 +63,13 @@ function getUniqueAttributeSelector(element, attributes) {
 
     // if the attribute is found create a selector for it
     if(attr) {
-      var s = element.tagName + "[" + attributes[i] + "='" + attr + "']";
+      var clean = attr.replace(new RegExp("'", 'g'), "\\\'");
+      var s = element.tagName + "[" + attributes[i] + "=\"" + clean + "\"]";
     }
 
     // if there's a selector and it's unique then break the loop and return it
     if(s && testSelector(element, s)) {
-      selector = element.tagName + "[" + attributes[i] + "='" + attr + "']";
+      selector = s;
       break;
     }
   }
@@ -151,7 +153,7 @@ function getCssSelector(element, attributes) {
     }
   }
 
-  return string;
+  return string.toString();
 }
 
 // get a selector for the given element

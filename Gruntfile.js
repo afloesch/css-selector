@@ -15,18 +15,23 @@ module.exports = function(grunt) {
       all: ['test/**/*.html']
     },
 
-    urequire: {
-      _defaults: {
-        path: 'src',
-        main: 'listener'
-      },
-      min : {
-        template: 'combined',
-        dstPath: 'index.min.js',
-        optimize: 'uglify2'
+    browserify: {
+      main: {
+        files: {
+          'index.min.js': ['index.js']
+        },
+        options: {
+          plugin: [
+            [ "browserify-derequire" ],
+            [ "bundle-minify" ]
+          ],
+          browserifyOptions: {
+            standalone: 'name'
+          }
+        }
       }
     }
   });
 
-  grunt.registerTask('default', ['eslint', 'urequire']);
+  grunt.registerTask('default', ['eslint', 'browserify']);
 }

@@ -21,7 +21,7 @@ describe('getLinkSelector', function() {
 
     var selector = element.getSelector();
 
-    assert(selector === "A[href='/some/path/to/page']", "Failed to create href link!");
+    assert(selector === 'A[href="/some/path/to/page"]', "Failed to create href link!");
   });
 
   it('Generate selector with contains href attrib.', function() {
@@ -31,7 +31,7 @@ describe('getLinkSelector', function() {
 
     var selector = element.getSelector();
 
-    assert(selector === "A[href*='/some/path/to/page']", "Failed to create a contains href link!");
+    assert(selector === 'A[href*="/some/path/to/page"]', "Failed to create a contains href link!");
   });
 
   it('Return the child element.', function() {
@@ -39,7 +39,7 @@ describe('getLinkSelector', function() {
 
     var selectors = element.getSelectors(null, false);
 
-    assert(selectors.indexOf("BUTTON[name='btn'] > SPAN") > -1, "Did not grab the child span!");
+    assert(selectors.indexOf('BUTTON[name="btn"] > SPAN') > -1, "Did not grab the child span!");
   });
 
   it('Return the parent link or button.', function() {
@@ -47,6 +47,6 @@ describe('getLinkSelector', function() {
 
     var selectors = element.getSelectors(null, true);
 
-    assert(selectors.indexOf("BUTTON[name='btn']") > -1, "Did not grab parent button!");
+    assert(selectors.indexOf('BUTTON[name="btn"]') > -1, "Did not grab parent button!");
   });
 });
